@@ -1,0 +1,116 @@
+// Prisma schema for MindTwist application
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth.js Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String?
+  email         String?      @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  gameResults   GameResult[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Game Data Models
+
+// More or Less game - comparison questions
+model MoreOrLessQuestion {
+  id          String   @id @default(cuid())
+  dayNumber   Int      @unique // Day 1-100
+  statementA  String   @db.Text
+  valueA      Float
+  statementB  String   @db.Text
+  valueB      Float
+  sourceA     String?  @db.Text
+  sourceB     String?  @db.Text
+  category    String?
+  createdAt   DateTime @default(now())
+
+  @@index([dayNumber])
+}
+
+// Timeline game - historical events
+model TimelineEvent {
+  id          String   @id @default(cuid())
+  dayNumber   Int      // Day 1-100 (5 events per day)
+  eventOrder  Int      // 1-5, the correct order within the day
+  title       String
+  description String?  @db.Text
+  year        Int
+  month       Int?
+  day         Int?
+  source      String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@unique([dayNumber, eventOrder])
+  @@index([dayNumber])
+}
+
+// Game Results
+model GameResult {
+  id         String   @id @default(cuid())
+  userId     String
+  gameType   String   // 'more-or-less' or 'timeline'
+  dayNumber  Int
+  playedAt   DateTime @default(now())
+  won        Boolean
+  score      Int?     // Optional score (e.g., time taken, attempts)
+  details    String?  @db.Text // JSON string with additional game details
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameType, dayNumber])
+  @@index([userId])
+  @@index([gameType])
+  @@index([dayNumber])
+}
