@@ -1,4 +1,4 @@
-# MindTwist - Daily Brain Games
+# MindTwist - Daily Brain Games Application
 
 MindTwist is a web application that offers daily brain challenges through two engaging games. Challenge yourself with trivia comparisons and historical timelines while tracking your progress over time.
 
