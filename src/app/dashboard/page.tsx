@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface GameStats {
   wins: number;
@@ -86,9 +87,11 @@ export default function Dashboard() {
         <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
           <div className="flex flex-col md:flex-row items-center gap-6">
             {session.user.image && (
-              <img
+              <Image
                 src={session.user.image}
                 alt={session.user.name || 'User'}
+                width={80}
+                height={80}
                 className="w-20 h-20 rounded-full shadow-lg"
               />
             )}
