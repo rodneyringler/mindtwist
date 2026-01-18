@@ -49,10 +49,25 @@ export async function GET() {
           where: { dayNumber },
           orderBy: { eventOrder: 'asc' },
         });
+
+        // Reconstruct submitted order from stored details
+        let submittedOrder = fullEvents;
+        if (existingResult.details) {
+          const details = JSON.parse(existingResult.details);
+          if (details.submittedOrder) {
+            // Map IDs back to full event objects in submitted order
+            const eventMap = new Map(fullEvents.map(e => [e.id, e]));
+            submittedOrder = details.submittedOrder
+              .map((id: string) => eventMap.get(id))
+              .filter(Boolean);
+          }
+        }
+
         result = {
           won: existingResult.won,
           score: existingResult.score,
           correctOrder: fullEvents,
+          submittedOrder,
         };
       }
     }
