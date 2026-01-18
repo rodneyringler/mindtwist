@@ -35,6 +35,7 @@ interface GameResult {
   won: boolean;
   score: number;
   correctOrder: TimelineEvent[];
+  submittedOrder: TimelineEvent[];
 }
 
 function SortableItem({
@@ -234,6 +235,7 @@ export default function TimelineGame() {
           won: data.won,
           score: data.score,
           correctOrder: data.correctOrder,
+          submittedOrder: events, // Save user's guesses before updating
         });
         // Update events with correct order for display
         setEvents(data.correctOrder);
@@ -283,15 +285,9 @@ export default function TimelineGame() {
     );
   }
 
-  // Determine which events are in correct position for result display
-  const getIsCorrect = (eventId: string, index: number) => {
-    if (!result) return false;
-    return result.correctOrder[index]?.id === eventId;
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+      <div className={`mx-auto ${hasPlayed ? 'max-w-4xl' : 'max-w-2xl'}`}>
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full text-orange-700 font-medium mb-4">
@@ -326,85 +322,118 @@ export default function TimelineGame() {
 
         {/* Events List */}
         <div className="mb-8">
-          {hasPlayed ? (
-            // Show results without dragging
-            <div>
-              {events.map((event, index) => (
-                <div
-                  key={event.id}
-                  className={`bg-white rounded-xl shadow-md p-4 mb-3 ${
-                    result
-                      ? getIsCorrect(event.id, index)
-                        ? 'ring-2 ring-green-400 bg-green-50'
-                        : 'ring-2 ring-red-400 bg-red-50'
-                      : ''
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">
-                        {event.title}
-                      </h3>
-                      {event.description && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          {event.description}
-                        </p>
-                      )}
-                      {event.year && (
-                        <p className="text-sm font-medium text-gray-500 mt-2">
-                          {event.year}
-                          {event.month &&
-                            `-${String(event.month).padStart(2, '0')}`}
-                          {event.day &&
-                            `-${String(event.day).padStart(2, '0')}`}
-                        </p>
-                      )}
-                    </div>
-                    {result && (
-                      <div
-                        className={`flex-shrink-0 ${
-                          getIsCorrect(event.id, index)
-                            ? 'text-green-500'
-                            : 'text-red-500'
-                        }`}
-                      >
-                        {getIsCorrect(event.id, index) ? (
-                          <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        ) : (
-                          <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        )}
+          {hasPlayed && result ? (
+            // Show results - both user's guesses and correct order
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Your Guess Column */}
+              <div>
+                <h2 className="text-lg font-semibold text-gray-700 mb-3 text-center">Your Guess</h2>
+                {result.submittedOrder.map((event, index) => {
+                  const isCorrect = result.correctOrder[index]?.id === event.id;
+                  return (
+                    <div
+                      key={`submitted-${event.id}`}
+                      className={`bg-white rounded-xl shadow-md p-4 mb-3 ${
+                        isCorrect
+                          ? 'ring-2 ring-green-400 bg-green-50'
+                          : 'ring-2 ring-red-400 bg-red-50'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <h3 className="font-semibold text-gray-800">
+                              {event.title}
+                            </h3>
+                            {event.year && (
+                              <span className="text-sm font-medium text-gray-500 whitespace-nowrap">
+                                {event.year}
+                                {event.month &&
+                                  `-${String(event.month).padStart(2, '0')}`}
+                                {event.day &&
+                                  `-${String(event.day).padStart(2, '0')}`}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div
+                          className={`flex-shrink-0 ${
+                            isCorrect ? 'text-green-500' : 'text-red-500'
+                          }`}
+                        >
+                          {isCorrect ? (
+                            <svg
+                              className="w-6 h-6"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-6 h-6"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          )}
+                        </div>
                       </div>
-                    )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Correct Order Column */}
+              <div>
+                <h2 className="text-lg font-semibold text-gray-700 mb-3 text-center">Correct Order</h2>
+                {result.correctOrder.map((event, index) => (
+                  <div
+                    key={`correct-${event.id}`}
+                    className="bg-white rounded-xl shadow-md p-4 mb-3 ring-2 ring-green-400 bg-green-50"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-bold">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <h3 className="font-semibold text-gray-800">
+                            {event.title}
+                          </h3>
+                          {event.year && (
+                            <span className="text-sm font-medium text-gray-500 whitespace-nowrap">
+                              {event.year}
+                              {event.month &&
+                                `-${String(event.month).padStart(2, '0')}`}
+                              {event.day &&
+                                `-${String(event.day).padStart(2, '0')}`}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {/* Placeholder to match the icon space in Your Guess column */}
+                      <div className="flex-shrink-0 w-6 h-6" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : (
             // Draggable list
