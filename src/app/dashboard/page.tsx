@@ -84,22 +84,22 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Welcome Header */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
-          <div className="flex flex-col md:flex-row items-center gap-6">
+        <div className="bg-white rounded-3xl shadow-xl p-4 md:p-8 mb-6 md:mb-8">
+          <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
             {session.user.image && (
               <Image
                 src={session.user.image}
                 alt={session.user.name || 'User'}
                 width={80}
                 height={80}
-                className="w-20 h-20 rounded-full shadow-lg"
+                className="w-20 h-20 rounded-full shadow-lg hidden md:block"
               />
             )}
             <div className="text-center md:text-left">
-              <h1 className="text-3xl font-bold text-gray-800">
+              <h1 className="text-xl md:text-3xl font-bold text-gray-800">
                 Welcome back, {session.user.name?.split(' ')[0]}!
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 text-sm md:text-base mt-1">
                 Day {stats?.currentDayNumber || '...'} - Ready for today&apos;s challenges?
               </p>
             </div>
@@ -111,94 +111,62 @@ export default function Dashboard() {
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Today&apos;s Games</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {/* More or Less Card */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-500 to-cyan-400 p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/games/more-or-less" className="block rounded-2xl shadow-lg overflow-hidden bg-gradient-to-r from-blue-500 to-cyan-400 p-3 md:p-6 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                     </svg>
                   </div>
                   <div className="text-white">
-                    <h3 className="text-xl font-bold">More or Less</h3>
-                    <p className="text-white/80 text-sm">Compare two statistics</p>
+                    <h3 className="text-lg md:text-xl font-bold">More or Less</h3>
+                    <p className="text-white/80 text-xs md:text-sm">Compare two statistics</p>
                   </div>
                 </div>
-              </div>
-              <div className="p-6">
                 {stats?.moreOrLess.playedToday ? (
-                  <div className="text-center">
-                    <div className="text-green-500 mb-2">
-                      <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-600 mb-4">Completed for today!</p>
-                    <Link
-                      href="/games/more-or-less"
-                      className="text-blue-600 hover:underline text-sm"
-                    >
-                      View your result
-                    </Link>
+                  <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-white text-xs md:text-sm font-medium">Completed</span>
                   </div>
                 ) : (
-                  <div className="text-center">
-                    <p className="text-gray-600 mb-4">Ready to play!</p>
-                    <Link
-                      href="/games/more-or-less"
-                      className="inline-block bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
-                    >
-                      Play Now
-                    </Link>
+                  <div className="bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-blue-600 text-xs md:text-sm font-medium">
+                    Play Now
                   </div>
                 )}
               </div>
-            </div>
+            </Link>
 
             {/* Timeline Card */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-r from-orange-500 to-red-400 p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/games/timeline" className="block rounded-2xl shadow-lg overflow-hidden bg-gradient-to-r from-orange-500 to-red-400 p-3 md:p-6 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div className="text-white">
-                    <h3 className="text-xl font-bold">Timeline</h3>
-                    <p className="text-white/80 text-sm">Order historical events</p>
+                    <h3 className="text-lg md:text-xl font-bold">Timeline</h3>
+                    <p className="text-white/80 text-xs md:text-sm">Order historical events</p>
                   </div>
                 </div>
-              </div>
-              <div className="p-6">
                 {stats?.timeline.playedToday ? (
-                  <div className="text-center">
-                    <div className="text-green-500 mb-2">
-                      <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-600 mb-4">Completed for today!</p>
-                    <Link
-                      href="/games/timeline"
-                      className="text-orange-600 hover:underline text-sm"
-                    >
-                      View your result
-                    </Link>
+                  <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-white text-xs md:text-sm font-medium">Completed</span>
                   </div>
                 ) : (
-                  <div className="text-center">
-                    <p className="text-gray-600 mb-4">Ready to play!</p>
-                    <Link
-                      href="/games/timeline"
-                      className="inline-block bg-gradient-to-r from-orange-500 to-red-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
-                    >
-                      Play Now
-                    </Link>
+                  <div className="bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-orange-600 text-xs md:text-sm font-medium">
+                    Play Now
                   </div>
                 )}
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 
