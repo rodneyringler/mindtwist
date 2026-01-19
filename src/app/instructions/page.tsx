@@ -170,6 +170,77 @@ export default function InstructionsPage() {
           </div>
         </div>
 
+        {/* Before & After Instructions */}
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-purple-500 to-violet-400 p-8">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+              </div>
+              <div className="text-white">
+                <h2 className="text-3xl font-bold">Before & After</h2>
+                <p className="text-white/80">Discover surprising historical juxtapositions</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-8">
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 text-lg">Two Facts Appear</h3>
+                  <p className="text-gray-600 mt-1">
+                    You&apos;ll see two historical facts that seem impossible when compared. These surprising juxtapositions challenge your assumptions about history.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 text-lg">Guess Which Came First</h3>
+                  <p className="text-gray-600 mt-1">
+                    Click on the fact you believe happened first. The answer is often surprising!
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 text-lg">Experience the &quot;Wait, Really?&quot; Moment</h3>
+                  <p className="text-gray-600 mt-1">
+                    After you guess, the actual years are revealed along with an explanation of why this comparison is so surprising. Prepare to have your mind blown!
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 rounded-xl p-6 mt-6">
+                <h4 className="font-semibold text-purple-800 mb-2">Example Question:</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-gray-700">The Great Pyramid of Giza was built</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-gray-700">The last woolly mammoth died</p>
+                  </div>
+                </div>
+                <p className="text-sm text-purple-700 mt-4">
+                  Which happened first? The answer might surprise you!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* General Rules */}
         <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">General Rules</h2>

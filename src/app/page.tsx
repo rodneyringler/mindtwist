@@ -53,9 +53,9 @@ export default function Home() {
       {/* Games Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-          Two Daily Challenges
+          Three Daily Challenges
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* More or Less Game Card */}
           <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center mb-6">
@@ -90,6 +90,25 @@ export default function Home() {
             <div className="bg-orange-50 rounded-xl p-4">
               <p className="text-sm text-orange-700 font-medium">
                 Example: Sort the invention of the printing press, first moon landing, and discovery of penicillin
+              </p>
+            </div>
+          </div>
+
+          {/* Before & After Game Card */}
+          <div className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-400 rounded-2xl flex items-center justify-center mb-6">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Before & After</h3>
+            <p className="text-gray-600 mb-6">
+              Two historical facts that seem impossible when compared. Guess which happened first
+              and prepare for a &quot;wait, really?&quot; moment!
+            </p>
+            <div className="bg-purple-50 rounded-xl p-4">
+              <p className="text-sm text-purple-700 font-medium">
+                Example: Were the pyramids built before or after the last woolly mammoth died?
               </p>
             </div>
           </div>
