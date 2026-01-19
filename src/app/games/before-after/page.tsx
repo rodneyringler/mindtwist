@@ -141,9 +141,9 @@ export default function BeforeAfterGame() {
 
   const formatYear = (year: number) => {
     if (year < 0) {
-      return `${Math.abs(year).toLocaleString()} BC`;
+      return `${Math.abs(year)} BC`;
     }
-    return year.toLocaleString();
+    return year.toString();
   };
 
   // Determine which came first for display purposes
