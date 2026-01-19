@@ -96,11 +96,27 @@ model TimelineEvent {
   @@index([dayNumber])
 }
 
+// Before & After game - surprising historical juxtapositions
+model BeforeAfterQuestion {
+  id            String   @id @default(cuid())
+  dayNumber     Int      @unique // Day 1-100
+  factA         String   @db.Text // First historical fact
+  yearA         Int      // Year of fact A
+  factB         String   @db.Text // Second historical fact
+  yearB         Int      // Year of fact B
+  explanation   String   @db.Text // Why this is surprising
+  source        String?  @db.Text // Citation/source
+  category      String?  // e.g., "Ancient History", "Technology", "Pop Culture"
+  createdAt     DateTime @default(now())
+
+  @@index([dayNumber])
+}
+
 // Game Results
 model GameResult {
   id         String   @id @default(cuid())
   userId     String
-  gameType   String   // 'more-or-less' or 'timeline'
+  gameType   String   // 'more-or-less', 'timeline', or 'before-after'
   dayNumber  Int
   playedAt   DateTime @default(now())
   won        Boolean
