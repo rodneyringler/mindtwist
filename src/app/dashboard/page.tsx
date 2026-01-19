@@ -31,6 +31,7 @@ interface RecentActivity {
 interface Stats {
   moreOrLess: GameStats;
   timeline: GameStats;
+  beforeAfter: GameStats;
   overall: OverallStats;
   recentActivity: RecentActivity[];
   currentDayNumber: number;
@@ -109,7 +110,7 @@ export default function Dashboard() {
         {/* Today's Games */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Today&apos;s Games</h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* More or Less Card */}
             <Link href="/games/more-or-less" className="block rounded-2xl shadow-lg overflow-hidden bg-gradient-to-r from-blue-500 to-cyan-400 p-3 md:p-6 hover:shadow-xl transition-shadow">
               <div className="flex items-center justify-between">
@@ -167,13 +168,42 @@ export default function Dashboard() {
                 )}
               </div>
             </Link>
+
+            {/* Before & After Card */}
+            <Link href="/games/before-after" className="block rounded-2xl shadow-lg overflow-hidden bg-gradient-to-r from-purple-500 to-violet-400 p-3 md:p-6 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                  </div>
+                  <div className="text-white">
+                    <h3 className="text-lg md:text-xl font-bold">Before & After</h3>
+                    <p className="text-white/80 text-xs md:text-sm">Surprising history facts</p>
+                  </div>
+                </div>
+                {stats?.beforeAfter.playedToday ? (
+                  <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-white text-xs md:text-sm font-medium">Completed</span>
+                  </div>
+                ) : (
+                  <div className="bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-purple-600 text-xs md:text-sm font-medium">
+                    Play Now
+                  </div>
+                )}
+              </div>
+            </Link>
           </div>
         </div>
 
         {/* Statistics */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Statistics</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             {/* Overall Stats */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -252,6 +282,32 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+
+            {/* Before & After Stats */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-gray-800">Before & After</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Played</span>
+                  <span className="font-bold text-gray-800">{stats?.beforeAfter.total || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Win Rate</span>
+                  <span className="font-bold text-purple-600">{stats?.beforeAfter.winRate || 0}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Current Streak</span>
+                  <span className="font-bold text-gray-800">{stats?.beforeAfter.currentStreak || 0}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -266,21 +322,27 @@ export default function Dashboard() {
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                       activity.gameType === 'more-or-less'
                         ? 'bg-blue-100'
-                        : 'bg-orange-100'
+                        : activity.gameType === 'timeline'
+                        ? 'bg-orange-100'
+                        : 'bg-purple-100'
                     }`}>
                       {activity.gameType === 'more-or-less' ? (
                         <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                         </svg>
-                      ) : (
+                      ) : activity.gameType === 'timeline' ? (
                         <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                         </svg>
                       )}
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-800">
-                        {activity.gameType === 'more-or-less' ? 'More or Less' : 'Timeline'}
+                        {activity.gameType === 'more-or-less' ? 'More or Less' : activity.gameType === 'timeline' ? 'Timeline' : 'Before & After'}
                         <span className="text-gray-500 font-normal ml-2">Day {activity.dayNumber}</span>
                       </p>
                       <p className="text-sm text-gray-500">

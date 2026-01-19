@@ -38,15 +38,24 @@ export async function GET() {
     const timelineWins = timelineResults.filter((r) => r.won).length;
     const timelineTotal = timelineResults.length;
 
+    // Calculate Before & After stats
+    const beforeAfterResults = allResults.filter((r) => r.gameType === 'before-after');
+    const beforeAfterWins = beforeAfterResults.filter((r) => r.won).length;
+    const beforeAfterTotal = beforeAfterResults.length;
+
     // Calculate current win streaks
     const moreOrLessStreak = calculateStreak(moreOrLessResults);
     const timelineStreak = calculateStreak(timelineResults);
+    const beforeAfterStreak = calculateStreak(beforeAfterResults);
 
     // Check if played today
     const playedMoreOrLessToday = moreOrLessResults.some(
       (r) => r.dayNumber === currentDayNumber
     );
     const playedTimelineToday = timelineResults.some(
+      (r) => r.dayNumber === currentDayNumber
+    );
+    const playedBeforeAfterToday = beforeAfterResults.some(
       (r) => r.dayNumber === currentDayNumber
     );
 
@@ -58,6 +67,8 @@ export async function GET() {
       playedAt: r.playedAt,
       dayNumber: r.dayNumber,
     }));
+
+    const totalWins = moreOrLessWins + timelineWins + beforeAfterWins;
 
     return NextResponse.json({
       moreOrLess: {
@@ -80,14 +91,22 @@ export async function GET() {
         currentStreak: timelineStreak,
         playedToday: playedTimelineToday,
       },
+      beforeAfter: {
+        wins: beforeAfterWins,
+        total: beforeAfterTotal,
+        winRate:
+          beforeAfterTotal > 0
+            ? Math.round((beforeAfterWins / beforeAfterTotal) * 100)
+            : 0,
+        currentStreak: beforeAfterStreak,
+        playedToday: playedBeforeAfterToday,
+      },
       overall: {
         totalGames: allResults.length,
-        totalWins: moreOrLessWins + timelineWins,
+        totalWins,
         winRate:
           allResults.length > 0
-            ? Math.round(
-                ((moreOrLessWins + timelineWins) / allResults.length) * 100
-              )
+            ? Math.round((totalWins / allResults.length) * 100)
             : 0,
       },
       recentActivity,
