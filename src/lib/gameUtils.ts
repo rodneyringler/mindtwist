@@ -1,30 +1,59 @@
 // Game utility functions
 
-// The start date for day calculations - this is when day 1 begins
-const START_DATE = new Date('2026-01-01T00:00:00Z');
+// Timezone for day calculations - Eastern Time (handles EST/EDT automatically)
+const TIMEZONE = 'America/New_York';
+
+// The start date for day calculations - midnight Eastern Time on Jan 1, 2026
+// This is 5:00 AM UTC (EST is UTC-5)
+const START_DATE = new Date('2026-01-01T05:00:00Z');
+
+/**
+ * Get date components in Eastern Time
+ */
+function getEasternDateComponents(date: Date): { year: number; month: number; day: number } {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: TIMEZONE,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+  const parts = formatter.formatToParts(date);
+  return {
+    year: parseInt(parts.find(p => p.type === 'year')!.value),
+    month: parseInt(parts.find(p => p.type === 'month')!.value) - 1,
+    day: parseInt(parts.find(p => p.type === 'day')!.value),
+  };
+}
 
 /**
  * Get the current day number based on the start date
- * Day 1 starts on START_DATE, and increments by 1 each day
+ * Day 1 starts on START_DATE, and increments by 1 each day at midnight Eastern Time
  * Cycles through 1-100 to allow infinite play
  */
 export function getCurrentDayNumber(): number {
   const now = new Date();
-  const diffTime = now.getTime() - START_DATE.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const startEastern = getEasternDateComponents(START_DATE);
+  const nowEastern = getEasternDateComponents(now);
+
+  // Calculate days between the two Eastern dates
+  const startDate = Date.UTC(startEastern.year, startEastern.month, startEastern.day);
+  const nowDate = Date.UTC(nowEastern.year, nowEastern.month, nowEastern.day);
+  const diffDays = Math.floor((nowDate - startDate) / (1000 * 60 * 60 * 24));
+
   // Cycle through days 1-100
   return ((diffDays % 100) + 1);
 }
 
 /**
- * Check if a date is today (in UTC)
+ * Check if a date is today (in Eastern Time)
  */
 export function isToday(date: Date): boolean {
-  const today = new Date();
+  const todayEastern = getEasternDateComponents(new Date());
+  const dateEastern = getEasternDateComponents(date);
   return (
-    date.getUTCFullYear() === today.getUTCFullYear() &&
-    date.getUTCMonth() === today.getUTCMonth() &&
-    date.getUTCDate() === today.getUTCDate()
+    dateEastern.year === todayEastern.year &&
+    dateEastern.month === todayEastern.month &&
+    dateEastern.day === todayEastern.day
   );
 }
 
