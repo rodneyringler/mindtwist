@@ -336,6 +336,14 @@ export default function BeforeAfterGame() {
               Play More or Less
             </Link>
           )}
+                    {hasPlayed && (
+            <Link
+              href="/games/timeline"
+              className="bg-gradient-to-r from-orange-500 to-red-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
+            >
+              Timeline
+            </Link>
+          )}
         </div>
       </div>
     </div>
