@@ -494,17 +494,17 @@ export default function TimelineGame() {
         )}
 
         {/* Navigation */}
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
           <Link
             href="/dashboard"
-            className="bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
+            className="w-full sm:w-auto text-center bg-white text-gray-700 px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
           >
             Back to Dashboard
           </Link>
           {hasPlayed && (
             <Link
               href="/games/more-or-less"
-              className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
+              className="w-full sm:w-auto text-center bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
             >
               Play More or Less
             </Link>
@@ -512,7 +512,7 @@ export default function TimelineGame() {
           {hasPlayed && (
             <Link
               href="/games/before-after"
-              className="bg-gradient-to-r from-purple-500 to-violet-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
+              className="w-full sm:w-auto text-center bg-gradient-to-r from-purple-500 to-violet-400 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-shadow"
             >
               Play Before & After
             </Link>
