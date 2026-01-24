@@ -1,23 +1,22 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { getCurrentDayNumber } from '@/lib/gameUtils';
+import { getAuthenticatedUser } from '@/lib/getUser';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getAuthenticatedUser();
 
-    if (!session?.user?.id) {
+    if (!user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
     }
 
-    const userId = session.user.id;
+    const userId = user.id;
     const currentDayNumber = getCurrentDayNumber();
 
     // Get all game results for the user

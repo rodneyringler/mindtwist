@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { getCurrentDayNumber } from '@/lib/gameUtils';
+import { getAuthenticatedUser } from '@/lib/getUser';
 
 // GET - Get today's Before & After question
 export async function GET() {
@@ -28,15 +27,15 @@ export async function GET() {
     }
 
     // Check if user has already played today
-    const session = await getServerSession(authOptions);
+    const user = await getAuthenticatedUser();
     let hasPlayed = false;
     let result = null;
 
-    if (session?.user?.id) {
+    if (user?.id) {
       const existingResult = await prisma.gameResult.findUnique({
         where: {
           userId_gameType_dayNumber: {
-            userId: session.user.id,
+            userId: user.id,
             gameType: 'before-after',
             dayNumber,
           },
@@ -77,9 +76,9 @@ export async function GET() {
 // POST - Submit answer for Before & After
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getAuthenticatedUser();
 
-    if (!session?.user?.id) {
+    if (!user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
@@ -101,7 +100,7 @@ export async function POST(request: NextRequest) {
     const existingResult = await prisma.gameResult.findUnique({
       where: {
         userId_gameType_dayNumber: {
-          userId: session.user.id,
+          userId: user.id,
           gameType: 'before-after',
           dayNumber,
         },
@@ -134,7 +133,7 @@ export async function POST(request: NextRequest) {
     // Save result
     await prisma.gameResult.create({
       data: {
-        userId: session.user.id,
+        userId: user.id,
         gameType: 'before-after',
         dayNumber,
         won,
