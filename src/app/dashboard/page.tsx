@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 
 interface GameStats {
   wins: number;
@@ -367,6 +368,19 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+
+        {/* Donate Section */}
+        <div className="mt-8 flex flex-col items-center">
+          <Script async src="https://js.stripe.com/v3/buy-button.js" />
+          {/* @ts-expect-error - stripe-buy-button is a custom element */}
+          <stripe-buy-button
+            buy-button-id="buy_btn_1StT9BENToEMexfLx2kpxOyq"
+            publishable-key="pk_live_51StSWjENToEMexfLWztLit7ejzVZRxv1aYXnSqFtQMsytWF49AI6JckGH3wBrEVXb0oq2ZRJB3nA49mcj38mR4b200AnBv9jib"
+          />
+          <p className="mt-3 text-sm text-gray-500 text-center">
+            If you enjoy MindTwist you can donate to help us keeping adding games!
+          </p>
+        </div>
       </div>
     </div>
   );
